@@ -4,7 +4,7 @@ import cv2
 from tkinter import filedialog
 # uso de plt debido a incompatibilidades con ubuntu 
 import matplotlib.pyplot as plt
-from transformations import rgb_to_hsi
+from transformations import rgb_to_hsi, rgb_to_lch
 
 
 class ColorSaturation():
@@ -13,21 +13,23 @@ class ColorSaturation():
         self.hue = pts [0] # tupla color seleccionado
         self.mul = pts [1] # tupla saturacion seleccionada
         self.mode = mode # Bool; False = HSI True = CIE L*c*h
+        self.trans_img = None
         self.mod_img = None
 
     def modify(self) -> None:
         if mode:
             #CIE L*c*h
-            self.cie_mod()
+            self.lch_mod()
         else:
             #HSI
             self.hsi_mod()
 
-    def cie_mod(self) -> None:
-        pass
+    def lch_mod(self) -> None:
+        self.trans_img = rgb_to_lch(self.img)
 
     def hsi_mod(self) -> None:
-        pass
+        self.trans_img = rgb_to_hsi(self.img)
+        
 
     def show(self) -> None:
         plt.imshow(img)
