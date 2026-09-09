@@ -12,9 +12,10 @@ from transformations import (
 class ColorSaturation():
     def __init__(self, img, pts, mode: bool):
         self.img = img
-        self.pts = pts # tupla pts
+        self.pts = np.array(sorted(pts, key = lambda x: x[0])) # tupla pts
         self.mode = mode # Bool; False = HSI True = CIE L*c*h
         self.trans_img = None
+        self.final_img = None
         self.mod_img = None
         self.mh = None
 
@@ -32,6 +33,11 @@ class ColorSaturation():
     def hsi_mod(self) -> None:
         self.trans_img = rgb_to_hsi(self.img)
         self.map_mh()
+        new_s = np.clip(self.mh * self.trans_img[:,:, 1], 0.0, 1.0)
+        h = self.trans_img[:, :, 0]
+        i = self.trans_img[:, :, 2]
+        self.trans_img = np.dstack((h, new_s, i))
+        self.final_img = (hsi_to_rgb(self.trans_img) * 255.0).astype(np.uint8)
 
 
     def map_mh(self):
@@ -39,14 +45,9 @@ class ColorSaturation():
                                  self.pts[:, 0],  self.pts[:, 1], period = 360.0)
 
     def show(self) -> None:
-        plt.imshow(self.img)
+        plt.imshow(self.final_img)
         plt.axis("off")
         plt.show()
-
-
-
-
-
 
 if __name__ == "__main__":
     my_path = filedialog.askopenfilename()
@@ -67,8 +68,7 @@ if __name__ == "__main__":
         else:
             if not point:
                 break
-    points.sort(key = lambda x: x[0])
-    colorsaturation = ColorSaturation(bgr_to_rgb(img), np.array(points), mode)
+    colorsaturation = ColorSaturation(bgr_to_rgb(img), points, mode)
     colorsaturation.modify()
 
     colorsaturation.show()
