@@ -1,5 +1,4 @@
 import numpy as np
-import skimage
 import cv2
 from tkinter import filedialog
 # uso de plt debido a incompatibilidades con ubuntu 
@@ -7,7 +6,6 @@ import matplotlib.pyplot as plt
 from transformations import (
     rgb_to_hsi, rgb_to_lch, hsi_to_rgb, lch_to_rgb, bgr_to_rgb
 )
-
 
 class ColorSaturation():
     def __init__(self, img, pts, mode: bool):
@@ -29,20 +27,23 @@ class ColorSaturation():
 
     def lch_mod(self) -> None:
         self.trans_img = rgb_to_lch(self.img)
+        self.mh = np.interp(self.trans_img[:, :, 2],
+                            self.pts[:, 0],  self.pts[:, 1], period = 360.0)
+        new_c = np.clip(self.mh * self.trans_img[:,:, 1], 0.0, None)
+        l = self.trans_img[:, :, 0]
+        h = self.trans_img[:, :, 2]
+        self.trans_img = np.dstack((l, new_c, h))
+        self.final_img = (lch_to_rgb(self.trans_img) * 255.0).astype(np.uint8)
 
     def hsi_mod(self) -> None:
         self.trans_img = rgb_to_hsi(self.img)
-        self.map_mh()
+        self.mh = np.interp(self.trans_img[:, :, 0],
+                            self.pts[:, 0],  self.pts[:, 1], period = 360.0)
         new_s = np.clip(self.mh * self.trans_img[:,:, 1], 0.0, 1.0)
         h = self.trans_img[:, :, 0]
         i = self.trans_img[:, :, 2]
         self.trans_img = np.dstack((h, new_s, i))
         self.final_img = (hsi_to_rgb(self.trans_img) * 255.0).astype(np.uint8)
-
-
-    def map_mh(self):
-        self.mh = np.interp(self.trans_img[:, :, 0],
-                                 self.pts[:, 0],  self.pts[:, 1], period = 360.0)
 
     def show(self) -> None:
         plt.imshow(self.final_img)
@@ -56,7 +57,6 @@ if __name__ == "__main__":
         mode = True
     else:
         mode = False
-
     points = list()
     while True:
         print("Si no deseas colocar mas puntos, dejalo vacio")
@@ -70,5 +70,4 @@ if __name__ == "__main__":
                 break
     colorsaturation = ColorSaturation(bgr_to_rgb(img), points, mode)
     colorsaturation.modify()
-
     colorsaturation.show()

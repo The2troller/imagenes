@@ -13,14 +13,17 @@ if __name__ == "__main__":
         gray = ((0,0), (120, 0), (240, 0))
         no_red = ((0, 0), (30, 1), (120, 1), (240, 1), (330, 1))
         no_green = ((0, 1), (90, 0.3), (120, 0), (150, 0.3), (240, 1), (100, 0), (140, 0), (80, 0.5), (160, 0.5))
-        no_blue = ((0, 1), (120, 1), (210, 0.6), (240, 0), (270, 0.6), (220, 0), (260, 0))
+        no_blue = ((0, 1), (120, 1), (210, 0.3), (240, 0), (270, 0.6), (220, 0), (260, 0))
         selections = [gray, no_red, no_green, no_blue]
         print("1. gray")
         print("2. no_red")
         print("3. no_green")
         print("4. no_blue")
         pts = selections[int(input("prueba :")) - 1]
-        colorsaturation = ColorSaturation(bgr_to_rgb(img), pts, True)
+        print("0. HSI")
+        print("1. Lch")
+        space = int(input("espacio:"))
+        colorsaturation = ColorSaturation(bgr_to_rgb(img), pts, space)
         colorsaturation.modify()
         colorsaturation.show()
     else:
