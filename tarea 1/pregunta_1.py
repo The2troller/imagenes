@@ -1,8 +1,7 @@
 import numpy as np
 import cv2
 from tkinter import filedialog
-# uso de plt debido a incompatibilidades con ubuntu 
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt # uso de plt debido a incompatibilidades con ubuntu 
 from transformations import (
     rgb_to_hsi, rgb_to_lch, hsi_to_rgb, lch_to_rgb, bgr_to_rgb
 )
@@ -19,10 +18,8 @@ class ColorSaturation():
 
     def modify(self) -> None:
         if self.mode:
-            #CIE L*c*h
             self.lch_mod()
         else:
-            #HSI
             self.hsi_mod()
 
     def lch_mod(self) -> None:
@@ -33,7 +30,7 @@ class ColorSaturation():
         l = self.trans_img[:, :, 0]
         h = self.trans_img[:, :, 2]
         self.trans_img = np.dstack((l, new_c, h))
-        self.final_img = (lch_to_rgb(self.trans_img) * 255.0).astype(np.uint8)
+        self.final_img = (np.clip(lch_to_rgb(self.trans_img), 0.0, 1.0) * 255.0).astype(np.uint8)
 
     def hsi_mod(self) -> None:
         self.trans_img = rgb_to_hsi(self.img)
@@ -43,7 +40,7 @@ class ColorSaturation():
         h = self.trans_img[:, :, 0]
         i = self.trans_img[:, :, 2]
         self.trans_img = np.dstack((h, new_s, i))
-        self.final_img = (hsi_to_rgb(self.trans_img) * 255.0).astype(np.uint8)
+        self.final_img = (np.clip(hsi_to_rgb(self.trans_img), 0.0, 1.0) * 255.0).astype(np.uint8)
 
     def show(self) -> None:
         plt.imshow(self.final_img)

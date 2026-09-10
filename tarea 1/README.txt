@@ -1,7 +1,7 @@
 Instrucciones de ejeccucion:
 
-Se puede ejecutar testing.py como alternativa con valores predefinidos
-Sino, correr directamente el .py de la pregunta asociada
+testing.py es un archivo de experimentacion controlado 
+enfocado en la parte de experimentacion y analisis
 
 
 Pregunta 1:
