@@ -7,7 +7,7 @@ import time
 if __name__ == "__main__":
     select = input("pregunta numero: ")
     if select == "1":
-        my_path = "test_imgs/P1_IMG_2402.tif"
+        my_path = "test_imgs/P2_IMG_2423.tif"
         img = cv2.imread(my_path)
 
         gray = ((0,0), (120, 0), (240, 0))

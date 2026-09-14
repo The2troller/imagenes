@@ -1,5 +1,7 @@
 Instrucciones de ejeccucion:
 
+correr desde tarea 1
+
 testing.py es un archivo de experimentacion controlado 
 enfocado en la parte de experimentacion y analisis
 
