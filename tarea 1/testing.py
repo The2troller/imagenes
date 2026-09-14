@@ -2,11 +2,12 @@ from pregunta_1 import ColorSaturation
 import cv2
 from transformations import bgr_to_rgb
 from pregunta_2 import Constrast
+import time
 
 if __name__ == "__main__":
     select = input("pregunta numero: ")
     if select == "1":
-        my_path = "tarea 1/test_imgs/P1_IMG_2402.tif"
+        my_path = "test_imgs/P1_IMG_2402.tif"
         img = cv2.imread(my_path)
 
         gray = ((0,0), (120, 0), (240, 0))
@@ -27,13 +28,24 @@ if __name__ == "__main__":
         print("1. Lch")
         space = int(input("espacio:"))
         colorsaturation = ColorSaturation(bgr_to_rgb(img), pts, space)
+        one = time.time()
         colorsaturation.modify()
+        print(f"Tiempo tardado: {round(time.time() - one, 1)} segundos")
         colorsaturation.show()
     elif select == "2":
-        my_path = "tarea 1/test_imgs/P2_IMG_2423.tif"
+        my_path = "test_imgs/P2_IMG_2423.tif"
+        print("0. Contraste global")
+        print("1. Contraste por regiones")
+        a = input("Seleccione cual usará: ")
         img = cv2.imread(my_path, cv2.IMREAD_GRAYSCALE)
-
         contrast = Constrast(img)
+        one = time.time()
+        if a:
+            contrast.more_contrast()
+            print(f"Tiempo tardado: {round(time.time() - one, 1)} segundos")
+        else:
+            contrast.full_image()
+            print(f"Tiempo tardado: {round(time.time() - one, 1)} segundos")
         contrast.show()
     else:
         pass
