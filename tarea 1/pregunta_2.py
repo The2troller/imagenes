@@ -18,17 +18,31 @@ class Constrast():
     def less_contrast(self):
         pass
 
+    def ec_formula(self):
+        self.sk_array = []
+        for i in range(self.img.max() + 1):
+            add = 0
+            for x in range(i + 1):
+                nk = np.sum(self.img == x)
+                pr = nk / self.img.size
+                sk = round(self.img.max() * pr)
+                add += sk
+            self.sk_array.append(add)
+        self.sk_array = np.array(self.sk_array)
+        self.final_img = self.sk_array[self.img]
+
     def show(self) -> None:
-        plt.imshow(self.final_img)
+        plt.imshow(self.final_img, cmap = "gray")
         plt.axis("off")
         plt.show()
-
 
 if __name__ == "__main__":
     my_path = filedialog.askopenfilename()
     #transformamos la imagen a escala de grises
     img = cv2.imread(my_path, cv2.IMREAD_GRAYSCALE)
     contrast = Constrast(img)
+    
+    contrast.ec_formula()
 
 
     contrast.show()
