@@ -3,11 +3,12 @@ import cv2
 from transformations import bgr_to_rgb
 from pregunta_2 import Constrast
 import time
+from pregunta_3 import Scaling
 
 if __name__ == "__main__":
     select = input("pregunta numero: ")
     if select == "1":
-        my_path = "test_imgs/P2_IMG_2423.tif"
+        my_path = "test_imgs/P1_IMG_2402.tif"
         img = cv2.imread(my_path)
 
         gray = ((0,0), (120, 0), (240, 0))
@@ -32,6 +33,9 @@ if __name__ == "__main__":
         colorsaturation.modify()
         print(f"Tiempo tardado: {round(time.time() - one, 1)} segundos")
         colorsaturation.show()
+
+
+        
     elif select == "2":
         my_path = "test_imgs/P2_IMG_2423.tif"
         print("0. Contraste global")
@@ -47,5 +51,7 @@ if __name__ == "__main__":
             contrast.full_image()
             print(f"Tiempo tardado: {round(time.time() - one, 1)} segundos")
         contrast.show()
-    else:
-        pass
+    elif select == "3":
+        my_path = "test_imgs/P3_IMG_2387_crop.tif"
+        img = cv2.imread(my_path, cv2.IMREAD_COLOR_RGB)
+        scaling = Scaling(img, 0.5)

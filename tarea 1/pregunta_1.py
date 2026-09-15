@@ -50,7 +50,7 @@ class ColorSaturation():
 if __name__ == "__main__":
     my_path = filedialog.askopenfilename()
     img = cv2.imread(my_path) #saves in bgr
-    if input("Alternar a CIE L*c*h? (Y) Default = HSI : ") == "Y":
+    if input("Alternar a CIE L*c*h? (Y) Default = HSI : ") == ("Y" or "y"):
         mode = True
     else:
         mode = False

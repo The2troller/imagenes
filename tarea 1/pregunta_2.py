@@ -47,11 +47,11 @@ class Constrast():
 if __name__ == "__main__":
     my_path = filedialog.askopenfilename()
     #transformamos la imagen a escala de grises
-    #img = cv2.imread(my_path, cv2.IMREAD_GRAYSCALE)
-    #contrast = Constrast(img)
-    #contrast.full_image()
-    #contrast.show()
-    #contrast = Constrast(img)
-    #contrast.more_contrast()
-    #contrast.show()
+    img = cv2.imread(my_path, cv2.IMREAD_GRAYSCALE)
+    contrast = Constrast(img)
+    if input("Desea ocupar regiones? (Y) : ") == ("Y" or "y"):
+            contrast.more_contrast()
+    else:
+        contrast.full_image()
+    contrast.show()
 
