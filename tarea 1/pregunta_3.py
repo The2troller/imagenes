@@ -53,7 +53,16 @@ class Scaling():
 if __name__ == "__main__":
     my_path = filedialog.askopenfilename()
     #transformamos la imagen a escala de grises
-    img = cv2.imread(my_path)
-    scaling = Scaling(img, 0.5)
+    scalation = float(input("Selecciona multiplicador (ej: 1.5): "))
+    print("0. A color")
+    print("1. Blanco y negro")
+    selection = input("Selecciona tipo de imagen final: ")
+    if selection == "1":
+        img = cv2.imread(my_path, cv2.IMREAD_GRAYSCALE)
+        is_gray = True
+    else:
+        img = cv2.imread(my_path)
+        is_gray = False
+    scaling = Scaling(img, scalation, is_gray)
     scaling.process()
     scaling.show()

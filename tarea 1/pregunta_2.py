@@ -48,10 +48,15 @@ if __name__ == "__main__":
     my_path = filedialog.askopenfilename()
     #transformamos la imagen a escala de grises
     img = cv2.imread(my_path, cv2.IMREAD_GRAYSCALE)
-    contrast = Constrast(img)
-    if input("Desea ocupar regiones? (Y) : ") == ("Y" or "y"):
-            contrast.more_contrast()
+    print("0. Total")
+    print("1. Regiones")
+    if input("Que desea ocupar?: ") == "1":
+        size_reg = [int(a) for a in input("Seleccione tamaño de regiones (ej: 450,450) [enteros] (en pixeles): ").split(",")]
+        distance_reg = int(input("Seleccione distancia entre regiones (ej: 15) [entero] (en pixeles): "))
+        contrast = Constrast(img, size_reg, distance_reg)
+        contrast.more_contrast()
     else:
+        contrast = Constrast(img)
         contrast.full_image()
     contrast.show()
 
