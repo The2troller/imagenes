@@ -44,7 +44,7 @@ if __name__ == "__main__":
         img = cv2.imread(my_path, cv2.IMREAD_GRAYSCALE)
         contrast = Constrast(img)
         one = time.time()
-        if a:
+        if a == "1":
             contrast.more_contrast()
             print(f"Tiempo tardado: {round(time.time() - one, 1)} segundos")
         else:
@@ -53,5 +53,26 @@ if __name__ == "__main__":
         contrast.show()
     elif select == "3":
         my_path = "test_imgs/P3_IMG_2387_crop.tif"
-        img = cv2.imread(my_path, cv2.IMREAD_COLOR_RGB)
-        scaling = Scaling(img, 0.5)
+        print("0. 0.5")
+        print("1. 0.8")
+        print("2. 1")
+        print("3. 1.3")
+        print("4. 2")
+        a = input("Seleccione el multiplicador: ")
+        mults = [0.5, 0.8, 1.0, 1.3, 2.0]
+        mult = mults[int(a)]
+        print("0. RGB")
+        print("1. gray")
+        a = input("Seleccione cual usará: ")
+        if a == "1":
+            img = cv2.imread(my_path, cv2.IMREAD_GRAYSCALE)
+            scaling = Scaling(img, mult, True)
+        else:
+            img = cv2.imread(my_path)
+            scaling = Scaling(img, mult)
+        one = time.time()
+        scaling.process()
+        print(f"Tiempo tardado: {round(time.time() - one, 1)} segundos")
+        print(img.shape)
+        print(scaling.final_img.shape)
+        scaling.show()
