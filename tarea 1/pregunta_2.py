@@ -6,11 +6,13 @@ import matplotlib.pyplot as plt # uso de plt debido a incompatibilidades con ubu
 
 
 class Constrast():
-    def __init__(self, img, reg_size = (450, 450), reg_distance = 15):
+    def __init__(self, img, reg_size = (450, 450), reg_distance = 15, mult = 255):
         self.img = img
         self.reg_size = reg_size #tamaño de las regiones (vertical, horizontal)
         self.reg_distance = reg_distance #distancia entre centros de regiones
         self.final_img = np.zeros(self.img.shape)
+        self.area = mult
+        self.offset = (255.0 - mult) / 2.0
 
     def more_contrast(self):
         h, w = self.img.shape
@@ -22,25 +24,21 @@ class Constrast():
                 mod_matrix[m, n] += 1
                 self.final_img[m, n] += self.contrast(self.img[m, n])
         self.final_img = np.round(self.final_img / mod_matrix).astype(np.uint8)
- 
-
-    def less_contrast(self):
-        pass
 
     def full_image(self):
         self.final_img = self.contrast(self.img)
 
     def contrast(self, img):
         sk_array = np.round(
-            255 * np.cumsum(
+            self.offset + (self.area * np.cumsum(
                 np.bincount(img.ravel(), minlength = 256) / img.size
-                ),
+                )),
                 0
                 )
         return sk_array[img]
 
     def show(self) -> None:
-        plt.imshow(self.final_img, cmap = "gray")
+        plt.imshow(self.final_img, cmap = "gray", vmin = 0, vmax = 255)
         plt.axis("off")
         plt.show()
 

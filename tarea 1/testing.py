@@ -42,14 +42,13 @@ if __name__ == "__main__":
         colorsaturation.show()
 
 
-    #plt.imsave("modified_imgs/p1cr7_no_green_hsi.png", colorsaturation.final_img)
     elif select == "2":
         my_path = "test_imgs/P2_IMG_2423.tif"
         print("0. Contraste global")
         print("1. Contraste por regiones")
         a = input("Seleccione cual usará: ")
         img = cv2.imread(my_path, cv2.IMREAD_GRAYSCALE)
-        contrast = Constrast(img)
+        contrast = Constrast(img, mult=155)
         one = time.time()
         if a == "1":
             contrast.more_contrast()
@@ -57,6 +56,7 @@ if __name__ == "__main__":
         else:
             contrast.full_image()
             print(f"Tiempo tardado: {round(time.time() - one, 1)} segundos")
+        #plt.imsave("modified_imgs/p2a_global_mult130.png", contrast.final_img, cmap="gray", vmin=0, vmax=255)
         contrast.show()
 
     elif select == "3":
