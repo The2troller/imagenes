@@ -4,7 +4,7 @@ from tkinter import filedialog
 import matplotlib.pyplot as plt # uso de plt debido a incompatibilidades con ubuntu 
 
 class Scaling():
-    def __init__(self, img, scale : float = 1.0, mode : bool = False):
+    def __init__(self, img, scale : float = 1.0, mode : bool = False, neighbour = False):
         self.img = img
         self.scale = scale
         self.mode = mode #rgb = False, gray = True
@@ -12,16 +12,25 @@ class Scaling():
         self.a = int(a * scale)
         self.b = int(b * scale)
         self.final_img = None
+        self.neighbour = neighbour
         
     def process(self):
-        if self.mode:
-            self.final_img = self.scale_img(self.img)
-            self.final_img = self.scale_img(self.img)
+        if self.neighbour:
+            if self.mode:
+                self.final_img = self.nearest_neighbour(self.img)
+            else:
+                r = self.nearest_neighbour(self.img[:, :, 2])
+                g = self.nearest_neighbour(self.img[:, :, 1])
+                b = self.nearest_neighbour(self.img[:, :, 0])
+                self.final_img = np.stack((r, g, b), axis = -1).astype(np.uint8)
         else:
-            r = self.scale_img(self.img[:, :, 2])
-            g = self.scale_img(self.img[:, :, 1])
-            b = self.scale_img(self.img[:, :, 0])
-            self.final_img = np.stack((r, g, b), axis = -1).astype(np.uint8)
+            if self.mode:
+                self.final_img = self.scale_img(self.img)
+            else:
+                r = self.scale_img(self.img[:, :, 2])
+                g = self.scale_img(self.img[:, :, 1])
+                b = self.scale_img(self.img[:, :, 0])
+                self.final_img = np.stack((r, g, b), axis = -1).astype(np.uint8)
 
     def scale_img(self, matrix):
         a = int(matrix.shape[0] * self.scale)
@@ -40,6 +49,17 @@ class Scaling():
                 y_one = mod_matrix_v1[int(prev_y), x] * (int(prev_y) + 1 - prev_y)
                 y_two = mod_matrix_v1[min(int(prev_y) + 1, mod_matrix_v1.shape[0] - 1), x] * (prev_y - int(prev_y))
                 mod_matrix[y, x] = y_one + y_two
+        return mod_matrix
+
+    def nearest_neighbour(self, matrix):
+        a = int(matrix.shape[0] * self.scale)
+        b = int(matrix.shape[1] * self.scale)
+        mod_matrix = np.zeros((a, b))
+        for y in range(a):
+            for x in range(b):
+                prev_x = min(int(x / self.scale), matrix.shape[1] - 1)
+                prev_y = min(int(y / self.scale), matrix.shape[0] - 1)
+                mod_matrix[y, x] = matrix[prev_y, prev_x]
         return mod_matrix
 
     def show(self) -> None:
@@ -63,6 +83,12 @@ if __name__ == "__main__":
     else:
         img = cv2.imread(my_path)
         is_gray = False
-    scaling = Scaling(img, scalation, is_gray)
+    print("0. interpolacion bilinear")
+    print("1. vecino mas cercano")
+    if input("Seleccione cual usar: ") == "1":
+        neighbour = True
+    else:
+        neighbour = False
+    scaling = Scaling(img, scalation, is_gray, neighbour)
     scaling.process()
     scaling.show()

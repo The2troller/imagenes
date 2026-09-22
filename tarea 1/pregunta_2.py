@@ -35,7 +35,7 @@ class Constrast():
                 )),
                 0
                 )
-        return sk_array[img]
+        return sk_array[img].astype(np.uint8)
 
     def show(self) -> None:
         plt.imshow(self.final_img, cmap = "gray", vmin = 0, vmax = 255)

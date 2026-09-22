@@ -5,14 +5,6 @@ from pregunta_2 import Constrast
 import time
 from pregunta_3 import Scaling
 
-
-
-######
-import matplotlib.pyplot as plt
-#######
-
-
-
 if __name__ == "__main__":
     select = input("pregunta numero: ")
     if select == "1":
@@ -38,9 +30,8 @@ if __name__ == "__main__":
         colorsaturation = ColorSaturation(bgr_to_rgb(img), pts, space)
         one = time.time()
         colorsaturation.modify()
-        print(f"Tiempo tardado: {round(time.time() - one, 1)} segundos")
+        print(f"Tiempo tardado: {round(time.time() - one, 5)} segundos")
         colorsaturation.show()
-
 
     elif select == "2":
         my_path = "test_imgs/P2_IMG_2423.tif"
@@ -48,26 +39,25 @@ if __name__ == "__main__":
         print("1. Contraste por regiones")
         a = input("Seleccione cual usará: ")
         img = cv2.imread(my_path, cv2.IMREAD_GRAYSCALE)
-        contrast = Constrast(img, mult=155)
+        contrast = Constrast(img)
         one = time.time()
         if a == "1":
             contrast.more_contrast()
-            print(f"Tiempo tardado: {round(time.time() - one, 1)} segundos")
+            print(f"Tiempo tardado: {round(time.time() - one, 5)} segundos")
         else:
             contrast.full_image()
-            print(f"Tiempo tardado: {round(time.time() - one, 1)} segundos")
-        #plt.imsave("modified_imgs/p2a_global_mult130.png", contrast.final_img, cmap="gray", vmin=0, vmax=255)
+            print(f"Tiempo tardado: {round(time.time() - one, 5)} segundos")
         contrast.show()
 
     elif select == "3":
-        my_path = "test_imgs/P3_IMG_2387_crop.tif"
+        my_path = "test_imgs/P3_IMG_2387_crop_crop.tif"
         print("0. 0.5")
         print("1. 0.8")
         print("2. 1")
         print("3. 1.3")
-        print("4. 2")
+        print("4. 1.9")
         a = input("Seleccione el multiplicador: ")
-        mults = [0.5, 0.8, 1.0, 1.3, 2.0]
+        mults = [0.5, 0.8, 1.0, 1.3, 1.9]
         mult = mults[int(a)]
         print("0. RGB")
         print("1. gray")
@@ -78,9 +68,9 @@ if __name__ == "__main__":
         else:
             img = cv2.imread(my_path)
             scaling = Scaling(img, mult)
+
         one = time.time()
+        scaling.neighbour = False
         scaling.process()
-        print(f"Tiempo tardado: {round(time.time() - one, 1)} segundos")
-        print(img.shape)
-        print(scaling.final_img.shape)
+        print(f"Tiempo tardado: {round(time.time() - one, 5)} segundos")
         scaling.show()
