@@ -28,9 +28,9 @@ def show(img) -> None:
     plt.axis("off")
     plt.show()
 
-def generate_img_p1():
+def generate_img_p1(seed: 676767):
     a = generate_synthetic_image()
-    return a + [generate_poisson_noise(a[0], 676767)]
+    return a + [generate_poisson_noise(a[0], seed)]
 
 if __name__ == "__main__":
     img_list = generate_img_p1()
