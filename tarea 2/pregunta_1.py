@@ -16,16 +16,25 @@ class Gaussian_adaptative_filter():
         self.gaussian_kernel(self.sigma)
         self.final_img = self.apply_gaussian_filter(self.img, self.kernel)
 
-    def adaptative_filter(self):
+    def adaptative_filter(self): #podemos añadir el test de testing para calcular la mejor sola
+        self.filter()
+        filtered_img = self.final_img.copy()
+        background_mask = filtered_img < 0.30
+        square_mask = (filtered_img >= 0.30) & (filtered_img < 0.60)
+        circle_mask = (filtered_img >= 0.60)
+        self.sigma_map = np.zeros((256,256))
+        self.sigma_map[background_mask] = 1.7
+        self.sigma_map[square_mask] = 1.4
+        self.sigma_map[circle_mask] = 1.5
         background_kernel = self.gaussian_kernel(1.7) 
         background = self.apply_gaussian_filter(self.img, background_kernel)
-        background *= self.data[1]
+        background *= background_mask
         square_kernel = self.gaussian_kernel(1.4)
         square = self.apply_gaussian_filter(self.img, square_kernel)
-        square *= self.data[2]
+        square *= square_mask
         circle_kernel = self.gaussian_kernel(1.5)
         circle = self.apply_gaussian_filter(self.img, circle_kernel)
-        circle *= self.data[3]
+        circle *= circle_mask
         self.final_img = background + square + circle
 
     def RMSE(self, base_img, mask = None):

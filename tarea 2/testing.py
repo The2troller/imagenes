@@ -9,7 +9,7 @@ if __name__ == "__main__":
     data = generate_img_p1(676767)
     base_img = data[0]
     img = data[4]
-    g = Gaussian_adaptative_filter(img, 1, data)
+    g = Gaussian_adaptative_filter(img, 1.6, data)
     select = input("pregunta numero: ")
     if select == "1":
         print("[0] Prueba de sigmas entre 0.1 y 5.5")
@@ -71,8 +71,12 @@ if __name__ == "__main__":
             plt.title("circle")
             plt.show()
         if sel == "1":
+            print("mejor global vs mejor por zonas")
+            g.filter()
+            g.show(g.final_img)
             g.adaptative_filter()
             g.show(g.final_img)
+            g.show(g.sigma_map)
                 
         
         
