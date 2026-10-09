@@ -17,11 +17,18 @@ def generate_synthetic_image():
     base_square_mask -= base_circle_mask
     return [base_matrix, base_mask, base_square_mask, base_circle_mask]
     
-
+#ayudantia
 def generate_poisson_noise(matrix, seed):
     np.random.seed(seed)
     noised_matrix = np.random.poisson(40 * matrix) / 40
-    return noised_matrix
+    return np.clip(noised_matrix, 0, 1)
+#ayudantia
+def generate_gauss_noise(img, seed):
+    np.random.seed(seed)
+    ruido = np.random.normal(0, 0.05, img.shape)
+    imagen_ruidosa = img + ruido
+    imagen_ruidosa = np.clip(imagen_ruidosa, 0, 1)
+    return imagen_ruidosa
 
 def show(img) -> None:
     plt.imshow(img)

@@ -1,19 +1,25 @@
 from pregunta_1 import Gaussian_adaptative_filter
-from generador_imagenes import generate_img_p1
+from generador_imagenes import generate_img_p1, generate_gauss_noise, show
 import cv2
 import matplotlib.pyplot as plt
-
+import numpy as np
 import time
+import skimage as ski
+from pregunta_2 import P2
+
+
+
 
 if __name__ == "__main__":
-    data = generate_img_p1(676767)
-    base_img = data[0]
-    img = data[4]
-    g = Gaussian_adaptative_filter(img, 1.6, data)
     select = input("pregunta numero: ")
     if select == "1":
+        data = generate_img_p1(8)
+        base_img = data[0]
+        img = data[4]
+        g = Gaussian_adaptative_filter(img, 1.6, data)
         print("[0] Prueba de sigmas entre 0.1 y 5.5")
-        print("[1] Filtrado usando funcion de sigma")
+        print("[1] Filtrado mejor adaptativo vs mejor global")
+        print("[2] Prueba de valores relacionados a 3 pixeles, uno en cada mascara")
         sel = input("Prueba seleccionada: ")
         if sel == "0":
             s_values = [x / 10 for x in range(0, 56)][1:]
@@ -71,15 +77,30 @@ if __name__ == "__main__":
             plt.title("circle")
             plt.show()
         if sel == "1":
-            print("mejor global vs mejor por zonas")
+            print("mejor global vs mejor adaptativo")
             g.filter()
             g.show(g.final_img)
+            print(g.RMSE(g.img))
             g.adaptative_filter()
             g.show(g.final_img)
             g.show(g.sigma_map)
-                
+            print(g.RMSE(g.img))
+        if sel == "2":
+            filtered_img = g.adaptative_filter()
+            print(f"Fondo (y=30, x=30): mu_sombrero = {filtered_img[30, 30]}, sigma asignado = {g.sigma_map[30, 30]}")
+            print(f"Cuadrado (y=80, x=80): mu_sombrero = {filtered_img[80, 80]}, sigma asignado = {g.sigma_map[80, 80]}")
+            print(f"Círculo (y=128, x=128): mu_sombrero = {filtered_img[128, 128]}, sigma asignado = {g.sigma_map[128, 128]}")
         
         
 
     elif select == "2":
-        pass
+        camera = ski.data.camera()
+        camera_n = camera.astype(np.float32) / 255.0
+        show(camera_n)
+        new_camera = generate_gauss_noise(camera_n, 676767)
+        show(new_camera)
+        p2 = P2(new_camera)
+        p2.anisotropic_gaussian_filter()
+        p2.show()
+        
+        
