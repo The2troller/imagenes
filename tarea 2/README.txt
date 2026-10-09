@@ -15,7 +15,9 @@ y posteriormente la imagen final obtenida.
 
 
 Pregunta 2:
-
+solo recibe la imagen predeterminada cameraman
+seguir instrucciones escritas
+mostrara la imagen original, luego la filtrada y finalmente el c_map
 
 Ante cualquier duda de seleccion de variables es posible ver el
 testing.py para posiblemente resolverla

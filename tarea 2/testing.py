@@ -95,12 +95,96 @@ if __name__ == "__main__":
 
     elif select == "2":
         camera = ski.data.camera()
+        #plt.imsave("img/original.jpg", camera)
         camera_n = camera.astype(np.float32) / 255.0
-        show(camera_n)
         new_camera = generate_gauss_noise(camera_n, 676767)
-        show(new_camera)
+        #plt.imsave("img/noised.jpg", camera)
         p2 = P2(new_camera)
-        p2.anisotropic_gaussian_filter()
-        p2.show()
+        print("[0] Prueba c_map para valores epsilon")
+        print("[1] Prueba de efecto de variables")
+        print("[2] Comparacion entre los 3")
+        sel = input("Prueba seleccionada: ")
+        if sel == "0":
+            print("[0] TV")
+            print("[1] Laplace")
+            print("[2] Gauss Laplace")
+            x = input("Seleccione: ")
+            p2.difusion_anisotropica(x, 50, 0.1, (10)**(-3.5))
+            p2.show(p2.c_map)
+            plt.imsave(f"img/{x}_map_10em3_5.jpg", p2.c_map)
+            p2.difusion_anisotropica(x, 50, 0.1, 1e-3)
+            p2.show(p2.c_map)
+            plt.imsave(f"img/{x}_map_10em3.jpg", p2.c_map)
+            p2.difusion_anisotropica(x, 50, 0.1, (10)**(-2.5))
+            p2.show(p2.c_map)
+            plt.imsave(f"img/{x}_map_10em2_5.jpg", p2.c_map)
+            p2.difusion_anisotropica(x, 50, 0.1, (10)**(-1))
+            p2.show(p2.c_map)
+            plt.imsave(f"img/{x}_map_0_25.jpg", p2.c_map)
+
+        elif sel == "1": 
+            print("[0] TV")
+            print("[1] Laplace")
+            print("[2] Gauss Laplace")
+            x = input("Seleccione: ")
+            
+            #base
+            p2.difusion_anisotropica(x, 50, 0.1, 10e-3)
+            p2.show(p2.final_img)
+            #plt.imsave(f"img/{x}_50_01_10e3.jpg", p2.final_img)
+            
+            #menos iter
+            p2.difusion_anisotropica(x, 5, 0.1, 10e-3)
+            p2.show(p2.final_img)
+            #plt.imsave(f"img/{x}_5_01_10e3.jpg", p2.final_img)
+
+            #mas iter
+            p2.difusion_anisotropica(x, 100, 0.1, 10e-3)
+            p2.show(p2.final_img)
+            #plt.imsave(f"img/{x}_100_01_10e3.jpg", p2.final_img)
+
+            #mas epsilon
+            p2.difusion_anisotropica(x, 50, 0.1, 10e-2)
+            p2.show(p2.final_img)
+            #plt.imsave(f"img/{x}_50_01_10e2.jpg", p2.final_img)
+
+            #menos epsilon
+            p2.difusion_anisotropica(x, 50, 0.1, 10**(-3.5))
+            p2.show(p2.final_img)
+            #plt.imsave(f"img/{x}_50_01_10e3_5.jpg", p2.final_img)
+
+            #mas lambda
+            p2.difusion_anisotropica(x, 50, 0.25, 10e-3)
+            p2.show(p2.final_img)
+            #plt.imsave(f"img/{x}_50_025_10e3.jpg", p2.final_img)
+
+            #menos lambda
+            p2.difusion_anisotropica(x, 50, 0.01, 10e-3)
+            p2.show(p2.final_img)
+            #plt.imsave(f"img/{x}_50_001_10e3.jpg", p2.final_img)
+
+            #para ver este descomentar proteccion
+            p2.difusion_anisotropica(x, 50, 0.35, 10e-3) 
+            p2.show(p2.final_img)
+            #plt.imsave(f"img/{x}_50_035_10e3.jpg", p2.final_img)
+        elif sel == "2":
+            p2.difusion_anisotropica("0", 50, 0.1, 10e-3) 
+            p2.show(p2.final_img)
+            #plt.imsave(f"img/0_god.jpg", p2.final_img)
+
+            p2.difusion_anisotropica("1", 50, 0.1, 0.1) 
+            p2.show(p2.final_img)
+            #plt.imsave(f"img/1_god.jpg", p2.final_img)
+
+            p2.difusion_anisotropica("2", 50, 0.1, 0.05) 
+            p2.show(p2.final_img)
+            #plt.imsave(f"img/2_god.jpg", p2.final_img)
+        else:
+            p2.difusion_anisotropica("0", 50, 0.1, 1e-3)
+            p2.show()
+            p2.difusion_anisotropica("1", 50, 0.1, 1e-3)
+            p2.show()
+            p2.difusion_anisotropica("2", 50, 0.1, 1e-3)
+            p2.show()
         
         
