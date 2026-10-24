@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt # uso de plt debido a incompatibilidades con ubu
 import numpy as np 
 
 class Notch_filter:
-    def __init__(self, img, size = None, pad_mode = "constant", perfect = True, d0 = 15, pos_notch = None):
+    def __init__(self, img, pos_notch, size = None, pad_mode = "constant", perfect = True, d0 = 15):
         self.img = img
         self.final_img = img
         if size == None:
@@ -15,10 +15,7 @@ class Notch_filter:
         self.perfect = perfect
         self.pad_mode = pad_mode
         self.d0 = d0
-        if pos_notch == None:
-            self.pos_notch = []
-            for i in range(7):
-                self.pos_notch.append(141 + 282 * i)
+        self.pos_notch = pos_notch
         self.img_pad = None
         self.pad_cols = None
         self.pad_rows = None
@@ -80,11 +77,9 @@ class Notch_filter:
         return h1 * h2
 
 
-    def show(self) -> None:
-        plt.imshow(self.final_img, cmap = "gray")
+    def show(self, img) -> None:
+        plt.imshow(img, cmap = "gray")
         plt.axis("off")
-        plt.show()
-        plt.imshow(self.f_show, cmap = "gray")
         plt.show()
 
 
@@ -93,9 +88,41 @@ if __name__ == "__main__":
     my_path = "img/P1.CR2"
     img = io.imread(my_path, as_gray = True)
     #plt.imsave("img/img_original_para_comparar.jpg", img, cmap="gray")
-    notch = Notch_filter(img, perfect=False)
+    print("0. Ideal")
+    print("1. Gaussiano")
+    if input("Seleccione el tipo de notch reject: ") == "0":
+        perfect = True
+    else:
+        perfect = False
+    s = input("Seleccione el tamaño del padding (EJ: 5,5 o 8,19): ").split(",")
+    size = [int(a) for a in s]
+    print("0. constant")
+    print("1. edge")
+    print("2. linear_ramp")
+    print("3. maximum")
+    print("4. mean")
+    print("5. median")
+    print("6. minimum")
+    print("7. reflect")
+    print("8. symmetric")
+    print("9. wrap")
+    pad_modes = ["constant", "edge", "linear_ramp", "maximum",
+                "mean", "median", "minimum", "reflect", "symmetric", "wrap"]
+    pad_mode = pad_modes[int(input("Seleccione el tipo de padding: "))]
+
+    if perfect:
+        d0 = int(input("Ancho del radio ideal: "))
+    else:
+        d0 = int(input("Escala de la campana gaussiana: "))
+
+    #basados en la imagen
+    pos_notch = []
+    for i in range(7):
+    #pos de lo iluminado (141) y la separacion entre ellos (282)
+        pos_notch.append(141 + 282 * i)
+    notch = Notch_filter(img, pos_notch, size, pad_mode, perfect, d0)
     notch.filter_img()
-    notch.show()
+    notch.show(notch.final_img)
     #plt.imsave("img/img_filtrada_gauss_const.jpg", notch.final_img, cmap="gray")
     #plt.imsave("img/transformada_filtrada_gauss_const.jpg", notch.f_show, cmap="gray")
         
