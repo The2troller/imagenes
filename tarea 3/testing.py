@@ -21,16 +21,51 @@ if __name__ == "__main__":
 
 
 
-        n = Notch_filter(img, pos_notch)
 
         print("0. Mostrar espectro imagen")
-
+        print("1. Casos notch 5, 15, 60 para Ideal y despues Gaussiano")
+        print("2. Tamaños de padding nulo, (50,50) y (h/2, l/2)")
 
         s = input("Seleccione: ")
         if s == "0":
+            n = Notch_filter(img, pos_notch)
             n.padding()
             n.show(n.f_show)
             #plt.imsave("img/transformada_base.jpg", n.f_show, cmap="gray")
+        if s == "1":
+            values = [5, 15, 60]
+            pos = [True, False]
+            cand = ["perfecta", "gauss"]
+            for i in range(2):
+                for val in values:
+                    n = Notch_filter(img, pos_notch, perfect = pos[i], d0 = val)
+                    n.padding()
+                    pre_f_show = n.f_show
+                    n.filter_img()
+                    n.show(n.final_img)
+                    #plt.imsave(f"img/img_filtrada_{cand[i]}_{val}.jpg", n.final_img, cmap="gray")
+                    n.show(pre_f_show)
+                    n.show(n.f_show)
+                    #plt.imsave(f"img/transformada_filtrada_{cand[i]}_{val}.jpg", n.f_show, cmap="gray")
+                    res = np.abs(img.astype(float) - n.final_img.astype(float))
+                    n.show(res)
+                    #plt.imsave(f"img/resta_img_og_y_{cand[i]}_{val}.jpg", res, cmap="gray")
+        if s == "2":
+            values = [(0,0), (50,50), None]
+            pos = [True, False]
+            cand = ["perfecta", "gauss"]
+            for i in range(2):
+                for val in values:
+                    n = Notch_filter(img, pos_notch, perfect= pos[i], size = val)
+                    n.filter_img()
+                    zoomed = n.final_img[500:650, 500:650]
+                    #n.show(zoomed)
+                    plt.imsave(f"img/zoomed_img_filtrada_{cand[i]}_{val}.jpg", zoomed, cmap="gray")
+
+
+
+                
+
             
 
 
