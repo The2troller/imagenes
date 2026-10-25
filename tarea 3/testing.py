@@ -59,8 +59,8 @@ if __name__ == "__main__":
                     n = Notch_filter(img, pos_notch, perfect= pos[i], size = val)
                     n.filter_img()
                     zoomed = n.final_img[500:650, 500:650]
-                    #n.show(zoomed)
-                    plt.imsave(f"img/zoomed_img_filtrada_{cand[i]}_{val}.jpg", zoomed, cmap="gray")
+                    n.show(zoomed)
+                    #plt.imsave(f"img/zoomed_img_filtrada_{cand[i]}_{val}.jpg", zoomed, cmap="gray")
 
 
 

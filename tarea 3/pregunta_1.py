@@ -94,8 +94,13 @@ if __name__ == "__main__":
         perfect = True
     else:
         perfect = False
+    print("Dejar vacio para tamaño estandar")
     s = input("Seleccione el tamaño del padding (EJ: 5,5 o 8,19): ").split(",")
-    size = [int(a) for a in s]
+    print(s)
+    if s == [""]:
+        size = None
+    else:
+        size = [int(a) for a in s]
     print("0. constant")
     print("1. edge")
     print("2. linear_ramp")
@@ -123,6 +128,8 @@ if __name__ == "__main__":
     notch = Notch_filter(img, pos_notch, size, pad_mode, perfect, d0)
     notch.filter_img()
     notch.show(notch.final_img)
-    #plt.imsave("img/img_filtrada_gauss_const.jpg", notch.final_img, cmap="gray")
+    #zoomed = notch.final_img[500:650, 500:650]
+    
+    #plt.imsave("img/img_filtrada_perfect_NOSIMETRICA.jpg", zoomed, cmap="gray")
     #plt.imsave("img/transformada_filtrada_gauss_const.jpg", notch.f_show, cmap="gray")
         
