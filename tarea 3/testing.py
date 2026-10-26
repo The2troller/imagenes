@@ -5,6 +5,9 @@ import time
 import skimage as ski
 from pregunta_1 import Notch_filter
 from skimage import io
+def normalize(image):
+                        img_float = image.astype(float)
+                        return (img_float - np.min(img_float)) / (np.max(img_float) - np.min(img_float) + 1e-8)
 
 
 
@@ -23,7 +26,7 @@ if __name__ == "__main__":
 
 
         print("0. Mostrar espectro imagen")
-        print("1. Casos notch 5, 15, 60 para Ideal y despues Gaussiano")
+        print("1. Casos notch 1, 5, 15, 60 para Ideal y despues Gaussiano")
         print("2. Tamaños de padding nulo, (50,50) y (h/2, l/2)")
 
         s = input("Seleccione: ")
@@ -32,8 +35,9 @@ if __name__ == "__main__":
             n.padding()
             n.show(n.f_show)
             #plt.imsave("img/transformada_base.jpg", n.f_show, cmap="gray")
+            print(n.f_show.min(), n.f_show.max(), np.percentile(n.f_show, [1, 50, 99]))
         if s == "1":
-            values = [5, 15, 60]
+            values = [1, 5, 15, 60]
             pos = [True, False]
             cand = ["perfecta", "gauss"]
             for i in range(2):
@@ -48,7 +52,10 @@ if __name__ == "__main__":
                     n.show(n.f_show)
                     #plt.imsave(f"img/transformada_filtrada_{cand[i]}_{val}.jpg", n.f_show, cmap="gray")
                     res = np.abs(img.astype(float) - n.final_img.astype(float))
-                    n.show(res)
+                    res = normalize(res)
+                    plt.imshow(res, cmap = "gray", vmin = 0, vmax = 1)
+                    plt.axis("off")
+                    plt.show()
                     #plt.imsave(f"img/resta_img_og_y_{cand[i]}_{val}.jpg", res, cmap="gray")
         if s == "2":
             values = [(0,0), (50,50), None]

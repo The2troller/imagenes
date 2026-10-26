@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt # uso de plt debido a incompatibilidades con ubu
 import numpy as np 
 
 class Notch_filter:
-    def __init__(self, img, pos_notch, size = None, pad_mode = "symmetric", perfect = True, d0 = 15):
+    def __init__(self, img, pos_notch, size = None, pad_mode = "symmetric", perfect = True, d0 = 1):
         self.img = img
         self.final_img = img
         if size == None:
@@ -58,7 +58,7 @@ class Notch_filter:
     def transform(self, img):
         f_transform = np.fft.fft2(img)
         self.f_shift = np.fft.fftshift(f_transform)
-        self.f_show = np.log10(np.abs(self.f_shift) + 1e-20)
+        self.f_show = np.log1p(np.abs(self.f_shift))
 
 
     def create_notch_ideal(self, u0, v0, d0):
