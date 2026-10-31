@@ -70,22 +70,6 @@ if __name__ == "__main__":
                     #plt.imsave(f"img/zoomed_img_filtrada_{cand[i]}_{val}.jpg", zoomed, cmap="gray")
 
 
-
-                
-
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
     elif select == "2":
-        pass
+          pass
+                
